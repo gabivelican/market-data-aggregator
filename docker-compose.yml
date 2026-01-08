@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: market-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=market_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1q2w3e
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Mapează scriptul de inițializare (dacă l-ai creat deja)
+      # Asigură-te că folderul 'database' și fișierul 'init.sql' există,
+      # altfel comentează linia de mai jos cu #
+      #- ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres_data:
