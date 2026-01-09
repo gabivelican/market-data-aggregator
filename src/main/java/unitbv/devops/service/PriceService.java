@@ -7,7 +7,10 @@ import unitbv.devops.entity.Symbol;
 import unitbv.devops.repository.PriceRepository;
 import unitbv.devops.repository.SymbolRepository;
 import unitbv.devops.dto.PriceDTO;
+import unitbv.devops.dto.PriceHistoryDTO;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,18 +29,35 @@ public class PriceService {
     private SymbolRepository symbolRepository;
 
     /**
-     * Obține istoricul prețurilor pentru un simbol
+     * Obține istoricul prețurilor pentru un simbol cu filtre și paginare
      */
-    public List<PriceDTO> getPricesBySymbol(String symbolCode) {
-        Optional<Symbol> symbol = symbolRepository.findBySymbolCode(symbolCode);
-        if (symbol.isEmpty()) {
-            return List.of();
+    public PriceHistoryDTO getPriceHistory(String symbolCode, LocalDateTime startDate, LocalDateTime endDate, Integer limit) {
+        Optional<Symbol> symbolOpt = symbolRepository.findBySymbolCode(symbolCode);
+        if (symbolOpt.isEmpty()) {
+            return new PriceHistoryDTO(symbolCode, List.of(), null);
         }
 
-        return priceRepository.findBySymbolOrderByTimestampDesc(symbol.get())
-                .stream()
+        Symbol symbol = symbolOpt.get();
+        List<Price> prices;
+
+        if (startDate != null && endDate != null) {
+            prices = priceRepository.findBySymbolAndTimestampBetween(symbol, startDate, endDate);
+        } else {
+            prices = priceRepository.findBySymbolOrderByTimestampDesc(symbol);
+        }
+
+        // Aplică limit dacă e specificat
+        if (limit != null && limit > 0 && prices.size() > limit) {
+            prices = prices.subList(0, limit);
+        }
+
+        List<PriceDTO> priceDTOs = prices.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        PriceHistoryDTO.PriceStatistics stats = calculateStatistics(prices);
+
+        return new PriceHistoryDTO(symbolCode, priceDTOs, stats);
     }
 
     /**
@@ -49,25 +69,27 @@ public class PriceService {
             return Optional.empty();
         }
 
-        List<Price> prices = priceRepository.findBySymbolOrderByTimestampDesc(symbol.get());
-        if (prices.isEmpty()) {
+        Price latestPrice = priceRepository.findFirstBySymbolOrderByTimestampDesc(symbol.get());
+        if (latestPrice == null) {
             return Optional.empty();
         }
 
-        return Optional.of(convertToDTO(prices.get(0)));
+        return Optional.of(convertToDTO(latestPrice));
     }
 
     /**
-     * Obține prețuri în interval de date
+     * Obține prețurile recente pentru toate simbolurile (ultima oră)
      */
-    public List<PriceDTO> getPricesByDateRange(String symbolCode, LocalDateTime startDate, LocalDateTime endDate) {
-        Optional<Symbol> symbol = symbolRepository.findBySymbolCode(symbolCode);
-        if (symbol.isEmpty()) {
-            return List.of();
-        }
+    public List<PriceDTO> getRecentPrices() {
+        LocalDateTime oneHourAgo = LocalDateTime.now().minusHours(1);
+        List<Symbol> allSymbols = symbolRepository.findAll();
 
-        return priceRepository.findBySymbolAndTimestampBetween(symbol.get(), startDate, endDate)
-                .stream()
+        return allSymbols.stream()
+                .flatMap(symbol -> {
+                    List<Price> recentPrices = priceRepository.findBySymbolAndTimestampBetween(
+                            symbol, oneHourAgo, LocalDateTime.now());
+                    return recentPrices.stream();
+                })
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -85,10 +107,45 @@ public class PriceService {
                 symbol.get(),
                 priceDTO.getPrice(),
                 priceDTO.getVolume(),
-                priceDTO.getTimestamp()
+                priceDTO.getTimestamp() != null ? priceDTO.getTimestamp() : LocalDateTime.now()
         );
         Price saved = priceRepository.save(price);
         return convertToDTO(saved);
+    }
+
+    /**
+     * Calculează statistici pentru o listă de prețuri
+     */
+    private PriceHistoryDTO.PriceStatistics calculateStatistics(List<Price> prices) {
+        if (prices.isEmpty()) {
+            return null;
+        }
+
+        BigDecimal sum = BigDecimal.ZERO;
+        BigDecimal min = prices.get(0).getPrice();
+        BigDecimal max = prices.get(0).getPrice();
+        Long totalVolume = 0L;
+
+        for (Price price : prices) {
+            sum = sum.add(price.getPrice());
+            if (price.getPrice().compareTo(min) < 0) {
+                min = price.getPrice();
+            }
+            if (price.getPrice().compareTo(max) > 0) {
+                max = price.getPrice();
+            }
+            totalVolume += price.getVolume();
+        }
+
+        BigDecimal average = sum.divide(BigDecimal.valueOf(prices.size()), 2, RoundingMode.HALF_UP);
+
+        return new PriceHistoryDTO.PriceStatistics(
+                average,
+                min,
+                max,
+                totalVolume,
+                prices.size()
+        );
     }
 
     /**

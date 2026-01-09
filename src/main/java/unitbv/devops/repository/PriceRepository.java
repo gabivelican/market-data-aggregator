@@ -12,5 +12,6 @@ import java.util.List;
 public interface PriceRepository extends JpaRepository<Price, Long> {
     List<Price> findBySymbolOrderByTimestampDesc(Symbol symbol);
     List<Price> findBySymbolAndTimestampBetween(Symbol symbol, LocalDateTime start, LocalDateTime end);
+    Price findFirstBySymbolOrderByTimestampDesc(Symbol symbol);
 }
 

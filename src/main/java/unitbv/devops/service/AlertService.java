@@ -26,40 +26,29 @@ public class AlertService {
     private SymbolRepository symbolRepository;
 
     /**
-     * Obține toate alertele
+     * Obține toate alertele cu filtre opționale
      */
-    public List<AlertDTO> getAllAlerts() {
-        return alertRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+    public List<AlertDTO> getAllAlerts(String symbolCode, String alertType, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Alert> alerts;
 
-    /**
-     * Obține alertele pentru un simbol
-     */
-    public List<AlertDTO> getAlertsBySymbol(String symbolCode) {
-        Optional<Symbol> symbol = symbolRepository.findBySymbolCode(symbolCode);
-        if (symbol.isEmpty()) {
-            return List.of();
+        if (symbolCode != null && alertType != null) {
+            alerts = alertRepository.findBySymbol_SymbolCodeAndAlertTypeOrderByTriggeredAtDesc(symbolCode, alertType);
+        } else if (symbolCode != null) {
+            alerts = alertRepository.findBySymbol_SymbolCodeOrderByTriggeredAtDesc(symbolCode);
+        } else if (alertType != null) {
+            alerts = alertRepository.findByAlertTypeOrderByTriggeredAtDesc(alertType);
+        } else {
+            alerts = alertRepository.findAll();
         }
 
-        return alertRepository.findBySymbolOrderByTriggeredAtDesc(symbol.get())
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Obține alertele în interval de date
-     */
-    public List<AlertDTO> getAlertsByDateRange(String symbolCode, LocalDateTime startDate, LocalDateTime endDate) {
-        Optional<Symbol> symbol = symbolRepository.findBySymbolCode(symbolCode);
-        if (symbol.isEmpty()) {
-            return List.of();
+        // Filtrare după date dacă sunt specificate
+        if (startDate != null && endDate != null) {
+            alerts = alerts.stream()
+                    .filter(alert -> !alert.getTriggeredAt().isBefore(startDate) && !alert.getTriggeredAt().isAfter(endDate))
+                    .collect(Collectors.toList());
         }
 
-        return alertRepository.findBySymbolAndTriggeredAtBetween(symbol.get(), startDate, endDate)
-                .stream()
+        return alerts.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -70,6 +59,28 @@ public class AlertService {
     public Optional<AlertDTO> getAlertById(Long id) {
         return alertRepository.findById(id)
                 .map(this::convertToDTO);
+    }
+
+    /**
+     * Obține alertele active (neconfirmate)
+     */
+    public List<AlertDTO> getActiveAlerts() {
+        return alertRepository.findByAcknowledgedOrderByTriggeredAtDesc(false)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Marchează o alertă ca fiind confirmată
+     */
+    public Optional<AlertDTO> acknowledgeAlert(Long id) {
+        return alertRepository.findById(id)
+                .map(alert -> {
+                    alert.setAcknowledged(true);
+                    Alert updated = alertRepository.save(alert);
+                    return convertToDTO(updated);
+                });
     }
 
     /**
@@ -85,9 +96,12 @@ public class AlertService {
                 symbol.get(),
                 alertDTO.getAlertType(),
                 alertDTO.getThreshold(),
-                alertDTO.getTriggeredAt(),
+                alertDTO.getTriggeredAt() != null ? alertDTO.getTriggeredAt() : LocalDateTime.now(),
                 alertDTO.getDetails()
         );
+        if (alertDTO.getAcknowledged() != null) {
+            alert.setAcknowledged(alertDTO.getAcknowledged());
+        }
         Alert saved = alertRepository.save(alert);
         return convertToDTO(saved);
     }
@@ -106,6 +120,9 @@ public class AlertService {
                     alert.setThreshold(alertDTO.getThreshold());
                     alert.setTriggeredAt(alertDTO.getTriggeredAt());
                     alert.setDetails(alertDTO.getDetails());
+                    if (alertDTO.getAcknowledged() != null) {
+                        alert.setAcknowledged(alertDTO.getAcknowledged());
+                    }
                     Alert updated = alertRepository.save(alert);
                     return convertToDTO(updated);
                 });
@@ -114,12 +131,8 @@ public class AlertService {
     /**
      * Șterge o alertă
      */
-    public boolean deleteAlert(Long id) {
-        if (alertRepository.existsById(id)) {
-            alertRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteAlert(Long id) {
+        alertRepository.deleteById(id);
     }
 
     /**
@@ -132,7 +145,9 @@ public class AlertService {
                 alert.getAlertType(),
                 alert.getThreshold(),
                 alert.getTriggeredAt(),
-                alert.getDetails()
+                alert.getDetails(),
+                alert.getAcknowledged()
         );
     }
 }
+

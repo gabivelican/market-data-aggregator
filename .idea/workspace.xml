@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c4090d23-34fd-4a9b-a1a1-e1650b795123" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PHASE8_DEPLOYMENT_GUIDE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/anomaly_detector.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/config_loader.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/data_structures.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/database_manager.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/gateway_client.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/http_server.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/include/moving_average.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/anomaly_detector.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/config_loader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/data_structures.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/database_manager.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/gateway_client.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/http_server.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/main.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/analysis-service/src/moving_average.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/init-db.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/client/AnalysisServiceClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/WebSocketConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/InternalController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/dto/AnalysisResultDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/dto/PriceHistoryDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/WebSocketService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V3__Add_acknowledged_to_alerts.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/websocket-test-client.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CODEBASE_REPORT.md" beforeDir="false" afterPath="$PROJECT_DIR$/CODEBASE_REPORT.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/OpenApiConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/OpenApiConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/AlertController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/AlertController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/PriceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/PriceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/SymbolController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/SymbolController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/dto/AlertDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/dto/AlertDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/entity/Alert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/entity/Alert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/repository/AlertRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/repository/AlertRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/repository/PriceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/repository/PriceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/AlertService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/AlertService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/PriceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/PriceService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/SymbolService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/SymbolService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "danserafim10"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/gabivelican/market-data-aggregator.git",
+    "accountId": "04d5f4aa-3a05-4203-bd46-6780b90d89b8"
+  }
+}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="381Va6wS2WJLprJpZIUK9cSYskH" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.Tema2_OF [clean].executor": "Run",
+    "Maven.Tema2_OF [compile].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.MarketDataAggregatorApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/facultate/2.1/OF/market-data-aggregator/market-data-aggregator",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="MarketDataAggregatorApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="unitbv.devops.MarketDataAggregatorApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="unitbv.devops.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.MarketDataAggregatorApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28539.13" />
+        <option value="bundled-js-predefined-d6986cc7102b-a71380e98a7c-JavaScript-IU-252.28539.13" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c4090d23-34fd-4a9b-a1a1-e1650b795123" name="Changes" comment="" />
+      <created>1767967124641</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767967124641</updated>
+      <workItem from="1767967125898" duration="13888000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

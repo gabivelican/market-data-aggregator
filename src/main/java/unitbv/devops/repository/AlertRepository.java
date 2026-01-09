@@ -12,4 +12,8 @@ import java.util.List;
 public interface AlertRepository extends JpaRepository<Alert, Long> {
     List<Alert> findBySymbolOrderByTriggeredAtDesc(Symbol symbol);
     List<Alert> findBySymbolAndTriggeredAtBetween(Symbol symbol, LocalDateTime start, LocalDateTime end);
+        List<Alert> findByAcknowledgedOrderByTriggeredAtDesc(Boolean acknowledged);
+    List<Alert> findBySymbol_SymbolCodeOrderByTriggeredAtDesc(String symbolCode);
+    List<Alert> findByAlertTypeOrderByTriggeredAtDesc(String alertType);
+    List<Alert> findBySymbol_SymbolCodeAndAlertTypeOrderByTriggeredAtDesc(String symbolCode, String alertType);
 }

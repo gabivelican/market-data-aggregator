@@ -30,6 +30,9 @@ public class Alert {
     @Column(columnDefinition = "TEXT")
     private String details;
 
+    @Column(nullable = false)
+    private Boolean acknowledged = false;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -96,6 +99,14 @@ public class Alert {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public Boolean getAcknowledged() {
+        return acknowledged;
+    }
+
+    public void setAcknowledged(Boolean acknowledged) {
+        this.acknowledged = acknowledged;
     }
 
     public LocalDateTime getCreatedAt() {

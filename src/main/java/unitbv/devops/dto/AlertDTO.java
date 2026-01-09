@@ -19,5 +19,6 @@ public class AlertDTO {
     private BigDecimal threshold;
     private LocalDateTime triggeredAt;
     private String details;
+    private Boolean acknowledged;
 }
 
