@@ -101,9 +101,13 @@ public class AuthenticationTest {
     @Test
     public void testAccessProtectedEndpointWithoutToken() throws Exception {
         System.out.println("\n✅ Testing Protected Endpoint Without Token:");
-        // Acceptăm 401 sau 403 pentru că Spring Security variază în funcție de config
         mockMvc.perform(get("/api/users"))
-                .andExpect(status().isOneOf(401, 403));
+                .andExpect(result -> {
+                    int status = result.getResponse().getStatus();
+                    if (status != 401 && status != 403) {
+                        throw new AssertionError("Expected 401 or 403 but got " + status);
+                    }
+                });
         System.out.println("   ✓ Access correctly denied without token");
     }
 
@@ -134,7 +138,12 @@ public class AuthenticationTest {
         System.out.println("\n✅ Testing Protected Endpoint With Invalid Token:");
         mockMvc.perform(get("/api/users")
                         .header("Authorization", "Bearer invalid_token"))
-                .andExpect(status().isOneOf(401, 403));
+                .andExpect(result -> {
+                    int status = result.getResponse().getStatus();
+                    if (status != 401 && status != 403) {
+                        throw new AssertionError("Expected 401 or 403 but got " + status);
+                    }
+                });
         System.out.println("   ✓ Access correctly denied with invalid token");
     }
 
