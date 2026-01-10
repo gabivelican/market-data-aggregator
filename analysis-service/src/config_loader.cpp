@@ -1,12 +1,41 @@
 #include "config_loader.hpp"
 #include <cstdlib>
 #include <iomanip>
+#include <fstream>
 
 namespace analysis {
 
 std::string ConfigLoader::getEnv(const char* name, const std::string& defaultValue) {
     const char* value = std::getenv(name);
     return value ? std::string(value) : defaultValue;
+}
+
+/**
+ * Read secret from file or environment variable
+ * Priority: Docker Secret file > Environment variable > Default value
+ */
+std::string ConfigLoader::getSecret(const char* filePath, const char* envVarName, const std::string& defaultValue) {
+    // Try to read from Docker secret file first
+    std::ifstream secretFile(filePath);
+    if (secretFile.is_open()) {
+        std::string content((std::istreambuf_iterator<char>(secretFile)),
+                           std::istreambuf_iterator<char>());
+        // Trim whitespace
+        if (!content.empty()) {
+            content.erase(0, content.find_first_not_of(" \n\r\t"));
+            content.erase(content.find_last_not_of(" \n\r\t") + 1);
+            return content;
+        }
+    }
+
+    // Fallback to environment variable
+    const char* envValue = std::getenv(envVarName);
+    if (envValue) {
+        return std::string(envValue);
+    }
+
+    // Finally use default value
+    return defaultValue;
 }
 
 int ConfigLoader::getEnvInt(const char* name, int defaultValue) {
@@ -27,14 +56,26 @@ AnalysisConfig ConfigLoader::load() {
     config.dbPort = getEnvInt("DB_PORT", 5432);
     config.dbName = getEnv("DB_NAME", "market_db");
     config.dbUser = getEnv("DB_USER", "postgres");
-    config.dbPassword = getEnv("DB_PASSWORD", "postgres");
+
+    // Read database password from Docker secret file
+    config.dbPassword = getSecret(
+        "/run/secrets/db_password",
+        "DB_PASSWORD",
+        "postgres"
+    );
 
     // Server configuration
     config.serverPort = getEnvInt("SERVER_PORT", 8081);
 
     // Gateway configuration
     config.gatewayUrl = getEnv("GATEWAY_URL", "http://localhost:8080");
-    config.internalSecret = getEnv("INTERNAL_SECRET", "supersecret123");
+
+    // Read internal API secret from Docker secret file
+    config.internalSecret = getSecret(
+        "/run/secrets/api_key",
+        "INTERNAL_SECRET",
+        "supersecret123"
+    );
 
     // Analysis parameters
     config.spikeThresholdPercent = getEnvDouble("SPIKE_THRESHOLD_PERCENT", 5.0);
@@ -73,4 +114,3 @@ void ConfigLoader::printConfig(const AnalysisConfig& config) {
 }
 
 } // namespace analysis
-

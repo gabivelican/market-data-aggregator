@@ -16,6 +16,8 @@ services:
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     networks:
       - market-network
+    secrets:
+      - db_password
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -33,36 +35,50 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Database Configuration
+      # Database Configuration (Variabilele tale custom)
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: market_db
       DB_USER: postgres
-      DB_PASSWORD: 1q2w3e
+      DB_PASSWORD_FILE: /run/secrets/db_password
+
+      # FIX: Configurare standard Spring Boot (pentru siguranță maximă la conexiune)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/market_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      # Parola e citită din fișier în aplicație, dar asigură-te că driverul o are
 
       # JWT Configuration
-      JWT_SECRET: mySecretKeyForJWTTokenGenerationAndValidationShouldBeLongEnoughForHS512Algorithm
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
       JWT_EXPIRATION: 86400000
 
       # Internal API Configuration
-      INTERNAL_SECRET: supersecret123-change-in-production
+      INTERNAL_SECRET_FILE: /run/secrets/api_key
 
       # C++ Analysis Service Configuration
       ANALYSIS_SERVICE_URL: http://analysis-service:8081
 
       # Spring Boot Configuration
       SPRING_PROFILES_ACTIVE: docker
+
+      # FIX DEBUG: Afișează detalii complete despre sănătate (pentru a repara eroarea 503)
+      MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS: always
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,metrics
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - market-network
+    secrets:
+      - db_password
+      - jwt_secret
+      - api_key
     healthcheck:
+      # Verifică endpoint-ul de health
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 60s # Am mărit timpul de start pentru a da timp Spring-ului
     restart: unless-stopped
 
   # C++ Analysis Service
@@ -79,14 +95,14 @@ services:
       DB_PORT: 5432
       DB_NAME: market_db
       DB_USER: postgres
-      DB_PASSWORD: 1q2w3e
+      DB_PASSWORD_FILE: /run/secrets/db_password
 
       # Server Configuration
       SERVER_PORT: 8081
 
       # Gateway Configuration
       GATEWAY_URL: http://gateway:8080
-      INTERNAL_SECRET: supersecret123-change-in-production
+      INTERNAL_SECRET_FILE: /run/secrets/api_key
 
       # Analysis Parameters
       SPIKE_THRESHOLD_PERCENT: 5.0
@@ -99,9 +115,12 @@ services:
       postgres:
         condition: service_healthy
       gateway:
-        condition: service_healthy
+        condition: service_started
     networks:
       - market-network
+    secrets:
+      - db_password
+      - api_key
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/analyze/health"]
       interval: 30s
@@ -118,3 +137,10 @@ volumes:
   postgres_data:
     driver: local
 
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt
+  api_key:
+    file: ./secrets/api_key.txt

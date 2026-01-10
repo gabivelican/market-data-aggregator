@@ -5,21 +5,33 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import unitbv.devops.configuration.SecretsConfiguration;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
 /**
  * Provider pentru generare și validare JWT tokens (Compatibil JJWT 0.11.5)
+ * Reads JWT secret from Docker Secrets or environment variables
  */
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret:mySecretKeyForJWTTokenGenerationAndValidation12345678}")
-    private String jwtSecret;
+    private final String jwtSecret;
+    private final long jwtExpirationMs;
 
-    @Value("${jwt.expiration:86400000}")
-    private long jwtExpirationMs;
+    public JwtTokenProvider(
+            @Value("${jwt.secret.file:/run/secrets/jwt_secret}") String jwtSecretFile,
+            @Value("${jwt.secret:}") String jwtSecretEnv,
+            @Value("${jwt.expiration:86400000}") long jwtExpirationMs) {
+
+        // Read JWT secret from file first, then from env variable, then use default
+        this.jwtSecret = SecretsConfiguration.readSecretFromFile(
+            jwtSecretFile,
+            jwtSecretEnv.isEmpty() ? "mySecretKeyForJWTTokenGenerationAndValidationShouldBeLongEnoughForHS512Algorithm" : jwtSecretEnv
+        );
+        this.jwtExpirationMs = jwtExpirationMs;
+    }
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = jwtSecret.getBytes();
@@ -31,9 +43,9 @@ public class JwtTokenProvider {
      */
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)       // MODIFICAT: subject -> setSubject
-                .setIssuedAt(new Date())    // MODIFICAT: issuedAt -> setIssuedAt
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs)) // MODIFICAT: expiration -> setExpiration
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -44,10 +56,10 @@ public class JwtTokenProvider {
     public String getUsernameFromToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey()) // MODIFICAT: verifyingKey -> setSigningKey
+                    .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token)
-                    .getBody(); // MODIFICAT: getPayload -> getBody (specific ver 0.11.x)
+                    .getBody();
             return claims.getSubject();
         } catch (Exception ex) {
             return null;
@@ -60,7 +72,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey()) // MODIFICAT: verifyingKey -> setSigningKey
+                    .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token);
             return true;

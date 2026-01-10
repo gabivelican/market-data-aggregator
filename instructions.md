@@ -732,7 +732,7 @@ Building a cloud-native application for real-time stock market data aggregation 
         - Gauge: `websocket.connections.active`
         - Timer: `api.request.duration` (by endpoint)
         - Counter: `alerts.generated.total` (by type)
-
+cd D:\Facultate\ANUL 2\SEM 1\OF\Tema2_OF\analysis-service>
 2. C++ service metrics:
     - Implement metrics tracking:
         - Counter: analysis requests processed

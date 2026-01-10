@@ -1,55 +1,41 @@
-cmake_minimum_required(VERSION 3.15)
-project(AnalysisService VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.10)
+project(MarketAnalysisService)
 
-# C++ Standard
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Build type
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
+# --- 1. SETARI SPECIFICE WINDOWS ---
+if(WIN32)
+    # Calea ta locala de Windows
+    set(PostgreSQL_ROOT "D:/POSTGRESQL")
+    add_compile_options(/W3)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+else()
+    # Setari pentru Linux (Docker)
+    add_compile_options(-Wall -Wextra)
 endif()
 
-# Compiler flags
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall")
+# --- 2. DEPENDINTE ---
+find_package(PostgreSQL REQUIRED)
+find_package(Threads REQUIRED) # Necesar pentru Linux networking
 
-# Find required packages
-find_package(Threads REQUIRED)
-
-# Optional: Find PostgreSQL (libpq)
-# find_package(PostgreSQL REQUIRED)
-
-# Include directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
-
-# Source files
-set(SOURCES
-    src/main.cpp
-    src/data_structures.cpp
-    src/database_manager.cpp
-    src/config_loader.cpp
-    src/http_server.cpp
-    src/moving_average.cpp
-    src/anomaly_detector.cpp
-    src/gateway_client.cpp
+# Includem directoarele
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${PostgreSQL_INCLUDE_DIRS}
 )
 
-# Create executable
-add_executable(analysis_service ${SOURCES})
+# --- 3. EXECUTABIL ---
+add_executable(analysis_service src/main.cpp)
 
-# Link libraries
-target_link_libraries(analysis_service
+# --- 4. LINKARE (Aici era eroarea ta!) ---
+target_link_libraries(analysis_service PRIVATE 
+    ${PostgreSQL_LIBRARIES}
     Threads::Threads
-    # PostgreSQL::PostgreSQL  # Uncomment if using libpq
 )
 
-# Installation
-install(TARGETS analysis_service DESTINATION bin)
-
-# Print configuration
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "C++ Standard: ${CMAKE_CXX_STANDARD}")
-message(STATUS "Compiler: ${CMAKE_CXX_COMPILER_ID}")
-
+# Adaugam librariile de Windows DOAR daca suntem pe Windows
+if(WIN32)
+    target_link_libraries(analysis_service PRIVATE ws2_32 Crypt32)
+endif()
