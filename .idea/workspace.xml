@@ -5,45 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4090d23-34fd-4a9b-a1a1-e1650b795123" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analysis-service/include/httplib.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analysis-service/include/json.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/secrets/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/secrets/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/secrets/api_key.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/secrets/db_password.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/secrets/jwt_secret.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/AnalysisServiceHealthIndicator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/RestTemplateConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/SecretsConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/controller/MetricsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/dto/MetricsSummaryDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/service/MetricsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application-docker.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/logback-spring.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/start_app.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-phase9.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-phase9.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-phases-1-8.ps1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis-service/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/analysis-service/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/analysis-service/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis-service/include/config_loader.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/analysis-service/include/config_loader.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis-service/src/config_loader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/analysis-service/src/config_loader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analysis-service/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/analysis-service/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/instructions.md" beforeDir="false" afterPath="$PROJECT_DIR$/instructions.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/MarketDataAggregatorApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/MarketDataAggregatorApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/configuration/SecurityConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/unitbv/devops/security/JwtTokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/unitbv/devops/security/JwtTokenProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CODEBASE_REPORT.md" beforeDir="false" afterPath="$PROJECT_DIR$/CODEBASE_REPORT.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +110,7 @@
       <workItem from="1767967125898" duration="13888000" />
       <workItem from="1768037633227" duration="2223000" />
       <workItem from="1768044303562" duration="4188000" />
-      <workItem from="1768048851305" duration="5567000" />
+      <workItem from="1768048851305" duration="5848000" />
     </task>
     <servers />
   </component>
