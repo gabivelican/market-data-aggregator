@@ -86,7 +86,7 @@ The project includes a GitHub Actions pipeline that automatically runs:
 ![Dashboard Preview](piture1.png)
 
 ### Swagger API Documentation
-![Swagger UI Preview](swagger.png)
+![Swagger UI Preview](picture2.png)
 
 ## 🔧 Troubleshooting
 
