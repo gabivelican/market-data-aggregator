@@ -83,7 +83,7 @@ The project includes a GitHub Actions pipeline that automatically runs:
 ## 📸 Screenshots
 
 ### Real-Time Dashboard
-![Dashboard Preview](picture1.png)
+![Dashboard Preview](piture1.png)
 
 ### Swagger API Documentation
 ![Swagger UI Preview](swagger.png)
