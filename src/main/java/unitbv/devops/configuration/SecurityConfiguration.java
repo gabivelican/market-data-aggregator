@@ -16,7 +16,7 @@ import unitbv.devops.security.JwtAuthenticationFilter;
 import java.util.Arrays;
 
 /**
- * Configurație pentru Spring Security cu JWT adaptată pentru CI/CD
+ * Configurație Security relaxată complet pentru generare date și screenshots
  */
 @Configuration
 @EnableWebSecurity
@@ -36,7 +36,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // --- LOGICĂ PENTRU CI/CD (Phase 11) ---
-        // Dacă profilul activ este "test", dezactivăm securitatea pentru a permite testelor automate să treacă
         if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             http
                     .csrf(AbstractHttpConfigurer::disable)
@@ -45,22 +44,23 @@ public class SecurityConfiguration {
             return http.build();
         }
 
-        // --- CONFIGURAȚIA NORMALĂ (Producție/Docker) ---
+        // --- CONFIGURAȚIA RELAXATĂ (Pentru Screenshots/Demo) ---
         http
                 .authorizeHttpRequests(authz -> authz
+                        // 👇 AICI ESTE MODIFICAREA CHEIE: .permitAll() la tot ce e /api/**
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers(
                                 "/actuator/health/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/api/auth/register",
-                                "/api/auth/login",
-                                "/api/auth/validate",
                                 "/internal/**",
                                 "/ws/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        // 👇 Lăsăm liber accesul peste tot temporar
+                        .anyRequest().permitAll()
                 )
+                // Păstrăm filtrul ca să nu crape dependențele, dar regulile de sus permit accesul oricum
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);

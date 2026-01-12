@@ -1,0 +1,35 @@
+/* Animatii pentru preturi */
+.price-up {
+    color: #2ecc71;
+    animation: flashGreen 1s;
+}
+
+.price-down {
+    color: #e74c3c;
+    animation: flashRed 1s;
+}
+
+@keyframes flashGreen {
+    0% { background-color: rgba(46, 204, 113, 0.2); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flashRed {
+    0% { background-color: rgba(231, 76, 60, 0.2); }
+    100% { background-color: transparent; }
+}
+
+.card-price-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.alert-item {
+    font-size: 0.9rem;
+    border-left: 4px solid transparent;
+}
+.alert-SPIKE_UP { border-left-color: #e74c3c; background-color: #fff5f5; }
+.alert-VOLUME { border-left-color: #f1c40f; }
+
+/* Dashboard layout tweaks */
+body { min-height: 100vh; }
